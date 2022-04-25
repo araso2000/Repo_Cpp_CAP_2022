@@ -1,5 +1,8 @@
 #include <iostream>
 #include <mpi.h>
+#include <ctime> 
+
+using namespace std;
 
 #define nLines 9			//Número de filas de los textos cifrados
 #define nCharsPerLine 33	//Número de caracteres en cada fila de los textos cifrados
@@ -196,10 +199,17 @@ void enigma()
 	printf("\n");
 }
 
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]){
+
+	unsigned t0, t1;
+	t0 = clock();
 
 	enigma();
+
+	t1 = clock();
+
+	double time = (double(t1 - t0) / CLOCKS_PER_SEC);
+	cout << "Tiempo de ejecucion (en segundos): " << time << endl;
 
 	return 0;
 }
