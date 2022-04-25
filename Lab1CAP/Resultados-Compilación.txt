@@ -1,0 +1,7 @@
+﻿Operación Compilar iniciada..
+1>------ Operación Compilar iniciada: proyecto: Lab1CAP, configuración: Debug x64 ------
+1>Source.cpp
+1>C:\Users\araso\Documents\VS Projects\Lab1CAP\Source.cpp(19,18): warning C4244: 'argumento': conversión de 'time_t' a 'unsigned int'; posible pérdida de datos
+1>Lab1CAP.vcxproj -> C:\Users\araso\Documents\VS Projects\Lab1CAP\x64\Debug\Lab1CAP.exe
+1>Compilación del proyecto "Lab1CAP.vcxproj" terminada.
+========== Compilar: 1 correctos, 0 incorrectos, 0 actualizados, 0 omitidos ==========

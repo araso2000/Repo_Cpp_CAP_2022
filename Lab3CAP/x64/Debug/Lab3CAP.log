@@ -1,0 +1,3 @@
+﻿  eje4.cpp
+C:\Users\araso\Documents\VS Projects\Lab3CAP\eje4.cpp(10,16): warning C4101: 'info': variable local sin referencia
+  Lab3CAP.vcxproj -> C:\Users\araso\Documents\VS Projects\Lab3CAP\x64\Debug\Lab3CAP.exe
