@@ -5,20 +5,27 @@
 
 using namespace std;
 
+int arraySend[297];
+int arrayReceive[99];
+int textoCifrado[3][33];
+int textoDescifrado[3][33];
+int resultado[297];
+int resultadoFinal[9][33];
+
 #define nLines 9			//Número de filas de los textos cifrados
 #define nCharsPerLine 33	//Número de caracteres en cada fila de los textos cifrados
 #define nRotors 2			//Número de rotores de enigma para cifrar y descifrar
 
 int ciphered[nLines][nCharsPerLine] = { //[9][33] - 2 rotores
-    {65,63,59,89,50,117,131,56,142,132,131,64,153,133,154,139,146,145,160,80,161,162,86,172,162,161,94,183,163,176,178,187,120},
-    {57,65,57,87,48,115,129,54,140,130,129,62,134,139,150,139,72,158,148,143,164,82,150,171,170,168,175,94,161,169,165,175,182},
-    {53,57,53,125,128,46,132,122,121,54,123,137,136,130,76,66,152,142,141,74,152,151,151,154,168,86,172,162,157,178,96,164,182},
-    {61,70,60,122,129,124,138,57,143,133,132,65,135,134,158,151,87,77,163,153,152,85,159,168,173,171,95,181,171,166,187,105,194},
-    {55,58,54,108,120,116,132,51,137,127,126,59,144,139,134,136,149,140,155,158,89,79,165,155,154,87,172,163,166,164,173,167,101},
-    {61,58,56,129,119,114,135,53,126,142,124,143,131,148,67,153,143,142,75,159,148,146,159,162,170,89,170,163,95,174,168,179,117},
-    {57,65,57,87,48,130,128,123,124,129,129,62,141,155,68,146,145,144,145,78,145,160,152,86,160,169,170,173,178,98,184,181,104},
-    {67,64,60,133,123,122,55,103,132,132,135,149,8252,152,71,128,140,161,146,153,95,85,157,168,173,93,179,169,172,184,103,183,180},
-    {57,56,54,114,117,131,49,116,131,123,57,124,137,139,65,151,141,140,73,153,150,150,153,167,168,87,173,170,93,162,176,176,170},
+	{65,63,59,89,50,117,131,56,142,132,131,64,153,133,154,139,146,145,160,80,161,162,86,172,162,161,94,183,163,176,178,187,120},
+	{57,65,57,87,48,115,129,54,140,130,129,62,134,139,150,139,72,158,148,143,164,82,150,171,170,168,175,94,161,169,165,175,182},
+	{53,57,53,125,128,46,132,122,121,54,123,137,136,130,76,66,152,142,141,74,152,151,151,154,168,86,172,162,157,178,96,164,182},
+	{61,70,60,122,129,124,138,57,143,133,132,65,135,134,158,151,87,77,163,153,152,85,159,168,173,171,95,181,171,166,187,105,194},
+	{55,58,54,108,120,116,132,51,137,127,126,59,144,139,134,136,149,140,155,158,89,79,165,155,154,87,172,163,166,164,173,167,101},
+	{61,58,56,129,119,114,135,53,126,142,124,143,131,148,67,153,143,142,75,159,148,146,159,162,170,89,170,163,95,174,168,179,117},
+	{57,65,57,87,48,130,128,123,124,129,129,62,141,155,68,146,145,144,145,78,145,160,152,86,160,169,170,173,178,98,184,181,104},
+	{67,64,60,133,123,122,55,103,132,132,135,149,8252,152,71,128,140,161,146,153,95,85,157,168,173,93,179,169,172,184,103,183,180},
+	{57,56,54,114,117,131,49,116,131,123,57,124,137,139,65,151,141,140,73,153,150,150,153,167,168,87,173,170,93,162,176,176,170},
 };
 
 void printNumbersAsString(int lines[nLines][nCharsPerLine])
@@ -67,21 +74,17 @@ int* decipher(int line[], int key)
 	return rawData;
 }
 
-int** enigma(int** ciphered){
-	int** deciphered;
-	deciphered = (int**)malloc(3 * sizeof(int*));
-
-	for (int ii = 0; ii < 3; ii++) {
-		deciphered[ii] = (int*)malloc(33 * sizeof(int*));
-	}
-	for (int idx = 0; idx < 3; idx++)
+void enigma()
+{
+	//int deciphered[nLines][nCharsPerLine];
+	for (int idx = 0; idx < nLines; idx++)
 	{
 		for (int lineKey = (int)pow(10, nRotors - 1); lineKey < (int)pow(10, nRotors); lineKey++)
 		{
 			int* p_deciphered = decipher(ciphered[idx], lineKey);
 
-			char decipheredLine[33];
-			for (int idx = 0; idx < 33; idx++)
+			char decipheredLine[nCharsPerLine];
+			for (int idx = 0; idx < nCharsPerLine; idx++)
 			{
 				decipheredLine[idx] = p_deciphered[idx];
 			}
@@ -90,16 +93,15 @@ int** enigma(int** ciphered){
 			sprintf_s(stringKey, "%d", lineKey);
 			if (!strncmp(stringKey, decipheredLine, nRotors))
 			{
-				for (int idx2 = 0; idx2 < 33; idx2++)
+				for (int idx2 = 0; idx2 < nCharsPerLine; idx2++)
 				{
-					deciphered[idx][idx2] = decipheredLine[idx2];
+					textoDescifrado[idx][idx2] = decipheredLine[idx2];
 				}
 				printf("Descifrada linea %d con clave %d\n", idx, lineKey);
 				break;
 			}
 		}
 	}
-	return deciphered;
 }
 
 int main(int argc, char* argv[]) {
@@ -117,29 +119,6 @@ int main(int argc, char* argv[]) {
     MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
     MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
-    //Creamos un vector que tenga todas las filas de la matriz a descrifrar
-    int arraySend[297];
-
-    //En principio cada hilo recibirá exactamente 99 números AKA tres filas del texto a descifrar (habrá 3 hilos)
-    int arrayReceive[99];
-
-    //Array que alojará las 3 filas a descrifrar en cada hilo
-	int** textoCifrado;
-	textoCifrado = (int**)malloc(3 * sizeof(int*));
-
-	for (int ii = 0; ii < 3; ii++) {
-		textoCifrado[ii] = (int*)malloc(33 * sizeof(int*));
-	}
-
-	int** textoDescifrado;
-	textoDescifrado = (int**)malloc(3 * sizeof(int*));
-
-	for (int ii = 0; ii < 3; ii++) {
-		textoDescifrado[ii] = (int*)malloc(33 * sizeof(int*));
-	}
-
-	int resultado[297];
-	int resultadoFinal[9][33];
 
     if (world_rank == 0) {
 		cout << "Texto a descifrar: " << endl;
@@ -152,11 +131,10 @@ int main(int argc, char* argv[]) {
                 arraySend[temp] = ciphered[ii][jj];
                 temp++;
             }
-        }
-        
+        }        
     }
 
-    int status = MPI_Scatter(&arraySend[0], (297 / 3), MPI_INT, &arrayReceive[0], 99, MPI_INT, 0, MPI_COMM_WORLD);
+    int status = MPI_Scatter(&arraySend[0], 99, MPI_INT, &arrayReceive[0], 99, MPI_INT, 0, MPI_COMM_WORLD);
     //cout << "ESTADO: " << status << endl;
 
     if (status != MPI_SUCCESS) {
@@ -172,7 +150,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
-	textoDescifrado = enigma(textoCifrado);
+	enigma();
 
 	int hola[99];
 	int temp1 = 0;
