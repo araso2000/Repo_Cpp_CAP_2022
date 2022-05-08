@@ -1,0 +1,9 @@
+﻿Operación Compilar iniciada..
+1>------ Operación Compilar iniciada: proyecto: Practica1_MPI_CAP, configuración: Debug x64 ------
+1>Practica1_MPI_CAP.cpp
+1>C:\Users\araso\Desktop\Repositorios\Repo_Cpp_CAP_2022\Practica1_MPI_CAP\Practica1_MPI_CAP.cpp(102,15): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
+1>C:\Users\araso\Desktop\Repositorios\Repo_Cpp_CAP_2022\Practica1_MPI_CAP\Practica1_MPI_CAP.cpp(156,14): warning C4101: 'info': variable local sin referencia
+1>C:\Users\araso\Desktop\Repositorios\Repo_Cpp_CAP_2022\Practica1_MPI_CAP\Practica1_MPI_CAP.cpp(118): warning C4172: devolución de dirección de la variable local o temporal: rawData
+1>Practica1_MPI_CAP.vcxproj -> C:\Users\araso\Desktop\Repositorios\Repo_Cpp_CAP_2022\Practica1_MPI_CAP\x64\Debug\Practica1_MPI_CAP.exe
+1>Compilación del proyecto "Practica1_MPI_CAP.vcxproj" terminada.
+========== Compilar: 1 correctos, 0 incorrectos, 0 actualizados, 0 omitidos ==========

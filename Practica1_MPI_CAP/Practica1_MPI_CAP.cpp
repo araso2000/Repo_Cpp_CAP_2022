@@ -5,16 +5,18 @@
 
 using namespace std;
 
-int arraySend[297];
-int arrayReceive[99];
-int textoCifrado[3][33];
-int textoDescifrado[3][33];
-int resultado[297];
-int resultadoFinal[9][33];
+#define nLines 9 //Número de filas de los textos cifrados
+#define nCharsPerLine 33 //Número de caracteres en cada fila de los textos cifrados
+#define nRotors 2 //Número de rotores de enigma para cifrar y descifrar
+#define total nLines*nCharsPerLine //Total de letras en el texto
+#define hilos 10	//Numero de hilos procesando
 
-#define nLines 9			//Número de filas de los textos cifrados
-#define nCharsPerLine 33	//Número de caracteres en cada fila de los textos cifrados
-#define nRotors 2			//Número de rotores de enigma para cifrar y descifrar
+int arraySend[total];
+int arrayReceive[total/hilos];
+int textoCifrado[hilos][nCharsPerLine];
+int textoDescifrado[hilos][nCharsPerLine];
+int resultado[total];
+int resultadoFinal[nLines][nCharsPerLine];
 
 int ciphered[nLines][nCharsPerLine] = { //[9][33] - 2 rotores
 	{65,63,59,89,50,117,131,56,142,132,131,64,153,133,154,139,146,145,160,80,161,162,86,172,162,161,94,183,163,176,178,187,120},
@@ -106,79 +108,78 @@ void enigma()
 
 int main(int argc, char* argv[]) {
 
-	unsigned t0, t1;
-	t0 = clock();
+		unsigned t0, t1;
+		t0 = clock();
 
-    MPI_Status info;
+		MPI_Status info;
 
-    MPI_Init(&argc, &argv);
+		MPI_Init(&argc, &argv);
 
-    int world_rank;
-    int world_size;
+		int world_rank;
+		int world_size;
 
-    MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
-    MPI_Comm_size(MPI_COMM_WORLD, &world_size);
+		MPI_Comm_rank(MPI_COMM_WORLD, &world_rank);
+		MPI_Comm_size(MPI_COMM_WORLD, &world_size);
 
 
-    if (world_rank == 0) {
-		cout << "Texto a descifrar: " << endl;
-		printNumbersAsString(ciphered);
+		if (world_rank == 0) {
+			cout << "Texto a descifrar: " << endl;
+			printNumbersAsString(ciphered);
 
-        //Añadimos toda la matriz en fila al vector
-        int temp = 0;
-        for (int ii = 0; ii < 9; ii++) {
-            for (int jj = 0; jj < 33; jj++) {
-                arraySend[temp] = ciphered[ii][jj];
-                temp++;
-            }
-        }        
-    }
-
-    int status = MPI_Scatter(&arraySend[0], 99, MPI_INT, &arrayReceive[0], 99, MPI_INT, 0, MPI_COMM_WORLD);
-    //cout << "ESTADO: " << status << endl;
-
-    if (status != MPI_SUCCESS) {
-        cout << "ERROR" << endl << endl;
-        exit(1);
-    }
-
-    int temp = 0;
-    for (int ii = 0; ii < 3; ii++) {
-        for (int jj = 0; jj < 33; jj++) {
-            textoCifrado[ii][jj] = arrayReceive[temp];
-            temp++;
-        }
-    }
-
-	enigma();
-
-	int hola[99];
-	int temp1 = 0;
-	for (int ii = 0; ii < 3; ii++) {
-		for (int jj = 0; jj < 33; jj++) {
-			hola[temp1] = textoDescifrado[ii][jj];
-			temp++;
+			//Añadimos toda la matriz en fila al vector
+			int temp = 0;
+			for (int ii = 0; ii < nLines; ii++) {
+				for (int jj = 0; jj < nCharsPerLine; jj++) {
+					arraySend[temp] = ciphered[ii][jj];
+					temp++;
+				}
+			}
 		}
-	}
 
-	MPI_Gather(&hola[0], 99, MPI_INT, &resultado[0], 297, MPI_INT, 0, MPI_COMM_WORLD);
+		int status = MPI_Scatter(&arraySend[0], total / hilos, MPI_INT, &arrayReceive[0], total / hilos, MPI_INT, 0, MPI_COMM_WORLD);
+		//cout << "ESTADO: " << status << endl;
 
-	temp = 0;
-	for (int ii = 0; ii < 9; ii++) {
-		for (int jj = 0; jj < 33; jj++) {
-			resultadoFinal[ii][jj] = resultado[temp];
-			temp++;
+		if (status != MPI_SUCCESS) {
+			cout << "ERROR" << endl << endl;
+			exit(1);
 		}
-	}
 
-    if (world_rank == 0) {
-		printNumbersAsString(resultadoFinal);
+		int temp = 0;
+		for (int ii = 0; ii < hilos; ii++) {
+			for (int jj = 0; jj < nCharsPerLine; jj++) {
+				textoCifrado[ii][jj] = arrayReceive[temp];
+				temp++;
+			}
+		}
 
-		t1 = clock();
+		enigma();
 
-		double time = (double(t1 - t0) / CLOCKS_PER_SEC);
-		cout << "Tiempo de ejecucion (en segundos): " << time << endl;
-    }
+		int hola[total / hilos];
+		int temp1 = 0;
+		for (int ii = 0; ii < hilos; ii++) {
+			for (int jj = 0; jj < nCharsPerLine; jj++) {
+				hola[temp1] = textoDescifrado[ii][jj];
+				temp++;
+			}
+		}
 
-	MPI_Finalize();
+		MPI_Gather(&hola[0], total / hilos, MPI_INT, &resultado[0], total, MPI_INT, 0, MPI_COMM_WORLD);
+
+		temp = 0;
+		for (int ii = 0; ii < nLines; ii++) {
+			for (int jj = 0; jj < nCharsPerLine; jj++) {
+				resultadoFinal[ii][jj] = resultado[temp];
+				temp++;
+			}
+		}
+
+		if (world_rank == 0) {
+			printNumbersAsString(resultadoFinal);
+
+			t1 = clock();
+
+			double time = (double(t1 - t0) / CLOCKS_PER_SEC);
+			cout << "Tiempo de ejecucion (en segundos): " << time << endl;
+		}		
+		MPI_Finalize();
 }
