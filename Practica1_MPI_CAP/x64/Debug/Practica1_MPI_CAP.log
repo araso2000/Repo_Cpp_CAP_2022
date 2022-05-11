@@ -1,5 +1,5 @@
 ﻿  Practica1_MPI_CAP.cpp
-C:\Users\araso\Desktop\Repositorios\Repo_Cpp_CAP_2022\Practica1_MPI_CAP\Practica1_MPI_CAP.cpp(60,15): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
-C:\Users\araso\Desktop\Repositorios\Repo_Cpp_CAP_2022\Practica1_MPI_CAP\Practica1_MPI_CAP.cpp(114,14): warning C4101: 'info': variable local sin referencia
-C:\Users\araso\Desktop\Repositorios\Repo_Cpp_CAP_2022\Practica1_MPI_CAP\Practica1_MPI_CAP.cpp(76): warning C4172: devolución de dirección de la variable local o temporal: rawData
+C:\Users\araso\Desktop\Repositorios\Repo_Cpp_CAP_2022\Practica1_MPI_CAP\Practica1_MPI_CAP.cpp(102,15): warning C4244: 'inicializando': conversión de 'double' a 'int'; posible pérdida de datos
+C:\Users\araso\Desktop\Repositorios\Repo_Cpp_CAP_2022\Practica1_MPI_CAP\Practica1_MPI_CAP.cpp(156,14): warning C4101: 'info': variable local sin referencia
+C:\Users\araso\Desktop\Repositorios\Repo_Cpp_CAP_2022\Practica1_MPI_CAP\Practica1_MPI_CAP.cpp(118): warning C4172: devolución de dirección de la variable local o temporal: rawData
   Practica1_MPI_CAP.vcxproj -> C:\Users\araso\Desktop\Repositorios\Repo_Cpp_CAP_2022\Practica1_MPI_CAP\x64\Debug\Practica1_MPI_CAP.exe
